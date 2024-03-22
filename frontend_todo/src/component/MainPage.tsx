@@ -1,4 +1,5 @@
-"use client";
+ 'use client'
+
 import { useState, useEffect } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -30,7 +31,7 @@ const MainPage = () => {
 
   const fetchTodos = async () => {
     try {
-      const response = await fetch("http://192.168.10.24:8000/new_todo");
+      const response = await fetch("https://d785-39-40-183-231.ngrok-free.app/todos");
       if (!response.ok) {
         throw new Error("failed to fetch");
       }
@@ -114,6 +115,8 @@ const MainPage = () => {
 
   return (
     <>
+<p>length of tods {newfetchTodos.length}</p>
+
       <div
         className={`flex flex-col min-h-screen ${!isLightMode ? "dark" : ""}`}
       >
