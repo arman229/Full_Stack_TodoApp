@@ -34,7 +34,7 @@ const AddTodoModel: FC<AddTodoModelInterface> = ({isDarkMode, closeModal, onSave
             setDate(editTodoItem.date);
             setPriority(editTodoItem.priority);
             setStatus(editTodoItem.status);
-            // setLabels([...editTodoItem.labels]);
+            setLabels([...editTodoItem.labels]);
         }
     }, [editTodoItem]);
 
@@ -124,10 +124,10 @@ const AddTodoModel: FC<AddTodoModelInterface> = ({isDarkMode, closeModal, onSave
                                    className={`block text-sm font-medium  ${isDarkMode ? ' bg-white ' : '  text-white'}`}>Select
                                 a
                                 Date</label>
-                            {/* <input type="date" id="datepicker" name="datepicker"
+                            <input type="date" id="datepicker" name="datepicker"
                                    value={date.toISOString().split('T')[0]}
                                    onChange={(e) => setDate(new Date(e.target.value))}
-                                   className={`mt-1 p-2 block w-full border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300 ${isDarkMode ? ' bg-white text-gray-900 ' : '   bg-gray-700 text-white'}`}/> */}
+                                   className={`mt-1 p-2 block w-full border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300 ${isDarkMode ? ' bg-white text-gray-900 ' : '   bg-gray-700 text-white'}`}/>
                         </div>
 
 

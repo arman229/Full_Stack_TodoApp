@@ -1,9 +1,9 @@
 from fastapi import FastAPI,Depends,HTTPException
 from todoapi import setting,todomodel
-from typing import Annotated
+from typing import Annotated,List
 from contextlib import asynccontextmanager
 from sqlmodel import create_engine,Session,select 
- 
+from fastapi.middleware.cors import CORSMiddleware
  
  
  
@@ -25,6 +25,7 @@ engine = create_engine( connection_string, connect_args={"sslmode": "require"}, 
 def create_tables():
     # We can create multiple tables only we define the schema for each table
     todomodel.Todo.metadata.create_all(engine)
+    todomodel.MoodPreference.metadata.create_all(engine)
     # todomodel.ourData.metadata.create_all(engine)
     
     
@@ -44,15 +45,41 @@ async def lifespan(app: FastAPI):
 # This means that when the application starts, the lifespan context manager will be executed.
 app = FastAPI( lifespan=lifespan, title="todo apis")  
 
- 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["*"],
+)
 # 7. It ensures that a new session is created and closed properly after use.
 #  this code defines a generator function get_session() that generates database session objects one at a time.
 def get_session():
     with Session(engine) as session:
         yield session
-        
+@app.get('mood', response_model=todomodel.MoodPreference)
+def get_mood_preference(session: Annotated[Session, Depends(get_session)]):
+    moodpre = session.exec(select(todomodel.MoodPreference)).all()
+    return moodpre
  
+@app.post('/mood/{mood_id}')
+def update_mood(mood_id: int, updated_mood: todomodel.MoodPreference, session: Annotated[Session, Depends(get_session)]):
+    default_mood = session.get(todomodel.MoodPreference,mood_id)
+    if not default_mood:
+        default_mood = todomodel.MoodPreference(light_id=1, mood='dark')
+        session.add(default_mood)
+        session.commit() 
+    sessionmood = session.get(todomodel.MoodPreference, mood_id)
+    if not sessionmood:
+        raise HTTPException(status_code=404, detail="Mood not found")
+    sessionmood.mood = updated_mood.mood
+    session.commit()
 
+    return {"message": f"Mood preference with id {mood_id} updated successfully"}
+    
+    
+    
+    
 @app.get("/todos/", response_model=list[todomodel.Todo])
 def read_todos(session: Annotated[Session, Depends(get_session)]):
     todos = session.exec(select(todomodel.Todo)).all()
@@ -75,6 +102,7 @@ def delete_todo(todo_id: int, session: Session = Depends(get_session)):
     session.commit()
     
     return {"message": "Todo deleted successfully"}
+import ast
 @app.put("/todos/{todo_id}", )
 def update_todos(todo_id: int, updated_todo: todomodel.Todo, session: Session = Depends(get_session)):
     todo = session.get(todomodel.Todo, todo_id)
@@ -85,7 +113,7 @@ def update_todos(todo_id: int, updated_todo: todomodel.Todo, session: Session = 
     todo.date = updated_todo.date
     todo.status = updated_todo.status
     todo.priority = updated_todo.priority
-    todo.labels = updated_todo.labels 
+    todo.labels = ast.literal_eval(updated_todo.labels )
     session.commit()
     
     return {"message": "Todo updated successfully"}
