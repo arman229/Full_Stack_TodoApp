@@ -71,7 +71,7 @@ const TodoCard: FC<TodoCardType> = ({
 
           <TodoMenu
             onEditItem={() => onEdit(todoItem)}
-            onDeleteItem={() => onDelete(todoItem.id)}
+            onDeleteItem={() => onDelete(todoItem)}
           />
         </div>
 

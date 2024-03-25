@@ -2,6 +2,7 @@
 import { TodoItem } from "@/data/datatypes";
 import { TodoPriority } from "@/data/datatypes";
 import { TodoStatus } from "@/data/datatypes";
+ 
 export function formatDate(date: Date): string {
   if (!(date instanceof Date)) {
       date = new Date(date);
@@ -52,6 +53,8 @@ export function filterTodos(
           console.log(`Failed to ${method.toLowerCase()} data`);
       }
       return await response.json();
+    
+       
     } catch (error) {
       console.error(`Error ${method.toLowerCase()} data:`, error);
       throw error;

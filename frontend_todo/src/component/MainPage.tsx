@@ -54,7 +54,7 @@ const MainPage = () => {
     setFilteredTodos(updatedFilteredTodos);
   }, [searchQuery, todosArray, selectedChip]);
 
-  const fetchData = async () => {
+  async function fetchData(){
     const headers = new Headers();
     headers.append("ngrok-skip-browser-warning", String(true));
     var options = {
@@ -63,7 +63,7 @@ const MainPage = () => {
     };
     try {
       setLoading(true);
-      const response = await fetch(API_URL, options);
+      const response = await fetch(`${API_URL}/todos`, options);
       const data = await response.json();
       setLoading(false);
       setTodosArray(data);
@@ -75,53 +75,43 @@ const MainPage = () => {
   };
   const onDelete = async (todoItem: TodoItem) => {
     const headers = new Headers();
-    headers.append("ngrok-skip-browser-warning", String(true));
+    headers.append("Content-Type", "application/json");
     var options = {
       method: "DELETE",
       headers: headers,
     };
     try {
-      const response = await fetch(`${API_URL}/todo/${todoItem.id}`,options);
+      const response = await fetch(`${API_URL}/todo/${todoItem.id}`, options);
       if (!response.ok) {
-         console.log("Failed to delete todo");
-         console.log(todoItem.id);
+        console.log("Failed to delete todo");
+        console.log(todoItem.id);
       }
- 
+      await fetchData();
     } catch (error) {
       console.error("Error deleting todo:", error);
-       
     }
   };
 
- 
-
   const onAddOrUpdate = async (newTodoItem: TodoItem) => {
-    // try {
-    //   let url = API_URL;
-    //   let method = "POST";
-    //   if (newTodoItem.id) {
-    //     url += newTodoItem.id;
-    //     method = "PUT";
-    //   }
-    //   const updatedData = await HandleApiRequest(
-    //     url,
-    //     method,
-    //     newTodoItem
-    //   );
-    //   if (newTodoItem.id) {
-    //     setTodosArray((prevArray: TodoItem[]) =>
-    //       prevArray.map((item) =>
-    //         item.id === updatedData.id ? updatedData : item
-    //       )
-    //     );
-    //   } else {
-    //     setTodosArray((prevArray: TodoItem[]) => [...prevArray, updatedData]);
-    //   }
-    // } catch (error) {
-    //   console.error("Error adding/updating todo:", error);
-    //   throw error;
-    // }
+    try {
+      let url = `${API_URL}/todo`;
+      let method = "POST";
+      
+      if (newTodoItem.id) {
+        url += `/${newTodoItem.id}`;
+        method = "PUT";
+      } 
+      const updatedData = await HandleApiRequest(url, method, newTodoItem);
+      console.log('mydatataaaaa',updatedData);
+    
+      await fetchData();
+  
+    } catch (error) {
+      console.error("Error adding/updating todo:", error);
+      throw error;
+    }
   };
+  
 
   return (
     <>
@@ -188,5 +178,5 @@ const MainPage = () => {
     </>
   );
 };
-
+ 
 export default MainPage;
