@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { formatDate } from "../utils/DateUtils";
 import { TodoItem } from "../data/datatypes";
 import { TodoMenu } from "./TodoMenu";
+import {TodoStatus} from "@/data/datatypes";
 
 interface TodoCardType {
   todoItem: TodoItem;
@@ -41,7 +42,7 @@ const TodoCard: FC<TodoCardType> = ({
                 onStatusChange({
                   ...todoItem,
                   status:
-                    todoItem.status == "PENDING" ? "COMPLETED" : "PENDING",
+                    todoItem.status == TodoStatus.PENDING ? TodoStatus.COMPLETED : TodoStatus.PENDING,
                 });
                 const addaudio = new Audio("/audio/markasdone.mp3");
                 addaudio.play();

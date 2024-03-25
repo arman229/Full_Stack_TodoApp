@@ -1,7 +1,7 @@
 import { todo } from "node:test";
 
 export type TodoItem = {
-  id: null | string;
+  id: null | string|number;
   title: string;
   description: string;
   date: Date;

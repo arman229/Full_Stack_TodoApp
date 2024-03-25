@@ -5,15 +5,15 @@ import Footer from "./Footer";
 import Search from "./Search";
 import TodoCard from "./TodoCard";
 import AddTodoModel from "./AddTodoModel";
-import { filterTodos} from "@/utils/DateUtils";
+import { filterTodos } from "@/utils/DateUtils";
 import { TodoItem } from "@/data/datatypes";
 import ThreeChips from "./threebutton";
- 
-import {HandleApiRequest} from "@/utils/DateUtils";
+
+import { HandleApiRequest } from "@/utils/DateUtils";
 import { API_URL } from "@/utils/url";
-import Myloading from '@/component/myloading';
+import Myloading from "@/component/myloading";
 const MainPage = () => {
-  const [isLightMode, setIsLightMode] = useState(true);
+  const [isLightMode, setIsLightMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [todosArray, setTodosArray] = useState<TodoItem[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -21,8 +21,7 @@ const MainPage = () => {
   const [selectedTodo, setSelectedTodo] = useState<TodoItem | undefined>();
   const [selectedChip, setSelectedChip] = useState<string>("all");
   const [loading, setLoading] = useState(true);
-  
-  
+
   useEffect(() => {
     var isLight = Boolean(localStorage.getItem("isLight") === "true");
     setIsLightMode(isLight);
@@ -39,14 +38,14 @@ const MainPage = () => {
     setSelectedTodo(newTodoItem);
     setIsModalOpen(true);
   };
- 
+
   useEffect(() => {
     let byStatusList = todosArray;
-    if (selectedChip !== 'all') {
-        const targetStatus = selectedChip === 'completed' ? 'COMPLETED' : 'PENDING';
-        byStatusList = todosArray.filter((todo) => todo.status === targetStatus);
+    if (selectedChip !== "all") {
+      const targetStatus =
+        selectedChip === "completed" ? "COMPLETED" : "PENDING";
+      byStatusList = todosArray.filter((todo) => todo.status === targetStatus);
     }
-
 
     const updatedFilteredTodos =
       searchQuery !== ""
@@ -55,13 +54,7 @@ const MainPage = () => {
     setFilteredTodos(updatedFilteredTodos);
   }, [searchQuery, todosArray, selectedChip]);
 
-
-
-
-
-
-
- const fetchData = async () => {
+  const fetchData = async () => {
     const headers = new Headers();
     headers.append("ngrok-skip-browser-warning", String(true));
     var options = {
@@ -70,48 +63,62 @@ const MainPage = () => {
     };
     try {
       setLoading(true);
-      const response = await fetch(API_URL,options);
+      const response = await fetch(API_URL, options);
       const data = await response.json();
- 
       setLoading(false);
       setTodosArray(data);
-      console.log('our fetch data',data)
+      console.log("our fetch data", data);
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
+    }
+  };
+  const onDelete = async (id:number) => {
+    const headers = new Headers();
+    try {
+      const response = await fetch(`${API_URL}/todos/${id}`, {
+        method: "DELETE",
+        headers: headers,
+      });
+      if (!response.ok) {
+         console.log("Failed to delete todo");
+         console.log(id);
+      }
+ 
+    } catch (error) {
+      console.error("Error deleting todo:", error);
       throw error;
     }
   };
 
-  
-  const onDelete = async (todoItem: TodoItem) => {
-    // try {
-    //   await HandleApiRequest(`${API_URL}${todoItem.id}`, "DELETE");
-    //   const updatedTodos = await fetchData();
-      
-    // } catch (error) {
-    //   console.error("Error deleting todo:", error);
-    //   throw error;
-    // }
-  };
-
+  // const onDelete = async (todoItem: TodoItem) => {
+  //   try {
+  //     // Delete the todo item from the server
+  //     await HandleApiRequest(
+  //       `${API_URL}/todos${todoItem.id}`,
+  //       "DELETE",
+  //       todoItem
+  //     );
+  //     await fetchData();
+  //   } catch (error) {
+  //     console.error("Error deleting todo:", error);
+  //     throw error;
+  //   }
+  // };
 
   const onAddOrUpdate = async (newTodoItem: TodoItem) => {
     // try {
     //   let url = API_URL;
     //   let method = "POST";
-  
     //   if (newTodoItem.id) {
     //     url += newTodoItem.id;
     //     method = "PUT";
     //   }
-  
     //   const updatedData = await HandleApiRequest(
     //     url,
     //     method,
     //     newTodoItem
     //   );
-  
     //   if (newTodoItem.id) {
     //     setTodosArray((prevArray: TodoItem[]) =>
     //       prevArray.map((item) =>
@@ -126,12 +133,6 @@ const MainPage = () => {
     //   throw error;
     // }
   };
-  
-
-
-
-
-
 
   return (
     <>
@@ -168,7 +169,7 @@ const MainPage = () => {
           />
           <div className="flex flex-wrap justify-center gap-6 pb-8">
             {loading ? (
-             <Myloading/>
+              <Myloading />
             ) : (
               filteredTodos.map((item) => (
                 <TodoCard

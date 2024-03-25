@@ -92,7 +92,7 @@ export function filterTodos(
     try {
       const response = await fetch(url, options);
       if (!response.ok) {
-        throw new Error(`Failed to ${method.toLowerCase()} data`);
+          console.log(`Failed to ${method.toLowerCase()} data`);
       }
       return await response.json();
     } catch (error) {
