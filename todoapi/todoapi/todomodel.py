@@ -12,7 +12,4 @@ class Todo(SQLModel, table=True):
       
       
  
-class MoodPreference(SQLModel,table=True):
-      light_id:int = Field(default=None, primary_key=True)
-      mood: str 
 # Q but in typescript we define the types of the status and priority enum and labels we define array or list

@@ -1,79 +1,98 @@
+import React, { FC } from "react";
+import { formatDate } from "../utils/DateUtils";
+import { TodoItem } from "../data/datatypes";
+import { TodoMenu } from "./TodoMenu";
 
-'use client'
-import React, { useState, useRef, useEffect, MouseEvent } from 'react';
-interface todomenutype {
-    onEditItem: () => void;
-    onDeleteItem: () => void }
-const TodoMenu: React.FC<todomenutype> = ({ onEditItem, onDeleteItem }) => {
-    const [isMenuOpen, setMenuOpen] = useState(false);
-    const menuButtonRef = useRef<HTMLButtonElement | null>(null);
-    const todoMenuRef = useRef<HTMLDivElement | null>(null);
+interface TodoCardType {
+  todoItem: TodoItem;
+  onStatusChange: (todoItem: TodoItem) => void;
+  onEdit: (todoItem: TodoItem) => void;
+  onDelete: (todoItem: TodoItem) => void;
+  isDarkMode?: boolean;
+}
 
-    const handleClickOutside: EventListener = (event: Event) => {
-        if (
-            todoMenuRef.current &&
-            !todoMenuRef.current.contains(event.target as Node) &&
-            menuButtonRef.current &&
-            !menuButtonRef.current.contains(event.target as Node)
-        ) {
-            setMenuOpen(false);
-        }
-    };
-
-    useEffect(() => {
-        document.addEventListener('click', handleClickOutside);
-
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
-    }, []);
-
-    const handleMenuButtonClick = () => {
-        setMenuOpen(!isMenuOpen);
-    };
-
-    const handleItemClick = (item: string) => {
-
-        if (item === 'Edit') {
-            onEditItem();
-        } else if (item === 'Delete') {
-            onDeleteItem();
-        }
-        setMenuOpen(false);
-    };
-
-    return (
-        <div className="relative inline-block text-left">
-            <div>
-
-
-
-                <button ref={menuButtonRef}   onClick={handleMenuButtonClick}
-                        className="inline-flex items-center p-2 text-sm font-medium text-center   rounded-lg text-black bg-blue-300 hover:bg-blue-600     dark:text-white dark:bg-gray-900 dark:hover:bg-[#091319]  "
-                        type="button">
-                    <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                         viewBox="0 0 4 15">
-                        <path
-                            d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
-                    </svg>
-                </button>
-            </div>
-
-            <div
-                ref={todoMenuRef}
-                className={`menu origin-top-right absolute right-0 mt-1.5 w-24 rounded-lg shadow-lg  bg-gray-300 dark:bg-gray-700   ${isMenuOpen ? 'block' : 'hidden'}`}
+const TodoCard: FC<TodoCardType> = ({
+  todoItem,
+  onStatusChange,
+  onEdit,
+  onDelete,
+  isDarkMode,
+}) => {
+  const getPriorityClasses = () => {
+    if (todoItem.priority == "LOW") {
+      return "bg-[#ff865b]  border-[#ff865b] text-black ";
+    } else if (todoItem.priority == "MEDIUM") {
+      return "bg-[#ff8ffa]  border-[#b387fa]  text-black  ";
+    } else {
+      return "bg-[#a381fa]  border-[#a381fa]  text-black  ";
+    }
+  };
+  return (
+    <>
+      <div
+        className={` max-w-sm w-full   sm:p-4  py-6 px-2  shadow-lg   dark:text-[#9fb9d0] dark:bg-[#232d35] bg-gray-200  } `}
+        style={{ borderRadius: "20px" }}
+      >
+        <div className="flex justify-between mb-4 items-center">
+          <div className="flex items-center">
+            <button
+              type="button"
+              onClick={() => {
+                onStatusChange({
+                  ...todoItem,
+                  status:
+                    todoItem.status == "PENDING" ? "COMPLETED" : "PENDING",
+                });
+                const addaudio = new Audio("/audio/markasdone.mp3");
+                addaudio.play();
+              }}
+              className={`py-1 px-3.5 text-sm focus:outline-none rounded-full border  bg-[#1b2431] hover:bg-[#1b1111]   ${
+                todoItem.status == "COMPLETED"
+                  ? "text-[#addf92]   border-[#addf92]   "
+                  : "   text-[#e6b56c]  border-[#e6b56c]  "
+              }`}
             >
-                <div className="py-1 ">
-                    <div className=" cursor-pointer block px-4 py-2 text-sm  text-black bg-gray-300 hover:bg-gray-400    dark:text-white dark:bg-gray-700 dark:hover:bg-[#091319] " onClick={() => handleItemClick('Edit')}>
-                        Edit
-                    </div>
-                    <div className=" cursor-pointer block px-4 py-2 text-sm  text-black bg-gray-300 hover:bg-gray-400  dark:text-white dark:bg-gray-700 dark:hover:bg-[#091319] " onClick={() => handleItemClick('Delete')}>
-                        Delete
-                    </div>
-                </div>
+              {" "}
+              {todoItem.status}
+            </button>
+            <div className="py-1 px-2 flex-shrink-0 sm:text-sm">
+              {formatDate(todoItem.date)}
+           
             </div>
-        </div>
-    );
-};
+          </div>
+          <div
+            className={`py-1 px-3.5 text-sm rounded-full border    ${getPriorityClasses()}`}
+          >
+            {" "}
+            {todoItem.priority}{" "}
+          </div>
 
-export { TodoMenu };
+          <TodoMenu
+            onEditItem={() => onEdit(todoItem)}
+            onDeleteItem={() => onDelete(todoItem)}
+          />
+        </div>
+
+        <div className="text-xl font-bold mb-6">{todoItem.title}</div>
+        <div className="flex justify-center">
+          <div
+            className={`  text-center mb-4 h-1.5  w-20 rounded-full mb-4 dark:bg-[#9fb9d0] bg-gray-900 `}
+          ></div>
+        </div>
+        <div className="mb-4">{todoItem.description}</div>
+        <div className="flex flex-wrap gap-2">
+          {todoItem.labels.length > 0 &&
+            todoItem.labels.map((label) => (
+              <div
+                className={`py-1 px-3.5 text-sm rounded-full border text-[#9fb9d0] bg-[#232d35] `}
+                key={label}
+              >
+                {label}{todoItem.labels.length}
+              </div>
+            ))}
+        </div>
+      </div>
+    </>
+  );
+};
+export default TodoCard;

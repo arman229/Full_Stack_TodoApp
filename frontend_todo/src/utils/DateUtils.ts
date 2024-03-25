@@ -2,11 +2,23 @@
 import { TodoItem } from "@/data/datatypes";
 import { TodoPriority } from "@/data/datatypes";
 import { TodoStatus } from "@/data/datatypes";
-export function formatDate(date: Date) {
-    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    const [year, month, day] = date.toISOString().split('T')[0].split('-');
-    return `${+day} ${months[+month - 1]} ${year}`;
+export function formatDate(date: Date): string {
+  if (!(date instanceof Date)) {
+      date = new Date(date);
+      if (isNaN(date.getTime())) {
+          // If the conversion fails, return an empty string or handle the error accordingly
+          return '';
+      }
+  }
+  
+  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  return `${day}-${months[month]}-${year}`;
 }
+
+
 
 
 export function filterTodos(
@@ -28,58 +40,55 @@ export function filterTodos(
     return result;
   }
   
-  function convertToTodoStatus(status: string): TodoStatus {
-      const lowerCaseStatus = status.toLowerCase();  
+  // function convertToTodoStatus(status: string): TodoStatus {
+  //     const lowerCaseStatus = status.toLowerCase();  
       
-      if (lowerCaseStatus.includes("pen") || lowerCaseStatus === "inprogress"||lowerCaseStatus === "uncompleted"||lowerCaseStatus === "pending") {
-        return "PENDING";
-      } else if (lowerCaseStatus.includes("com") || lowerCaseStatus === "completed"|| lowerCaseStatus === "completes"||lowerCaseStatus === "complete") {
-        return "COMPLETED";
-      } else {
-        return "PENDING";  
-      }
-    }
-    function converttotodopriority(priority: string): TodoPriority {
-      const lowerCasePriority = priority.toLowerCase();
+  //     if (lowerCaseStatus.includes("pen") || lowerCaseStatus === "inprogress"||lowerCaseStatus === "uncompleted"||lowerCaseStatus === "pending") {
+  //       return "PENDING";
+  //     } else if (lowerCaseStatus.includes("com") || lowerCaseStatus === "completed"|| lowerCaseStatus === "completes"||lowerCaseStatus === "complete") {
+  //       return "COMPLETED";
+  //     } else {
+  //       return "PENDING";  
+  //     }
+  //   }
+  //   function converttotodopriority(priority: string): TodoPriority {
+  //     const lowerCasePriority = priority.toLowerCase();
       
-      if (lowerCasePriority.includes("low")) {
-        return "LOW";
-      } else if (lowerCasePriority.includes("medium")) {
-        return "MEDIUM";
-      } else if (lowerCasePriority.includes("high")) {
-        return "HIGH";
-      } else {
-        return "MEDIUM";  
-      }
-    }
+  //     if (lowerCasePriority.includes("low")) {
+  //       return "LOW";
+  //     } else if (lowerCasePriority.includes("medium")) {
+  //       return "MEDIUM";
+  //     } else if (lowerCasePriority.includes("high")) {
+  //       return "HIGH";
+  //     } else {
+  //       return "MEDIUM";  
+  //     }
+  //   }
     
   
-  export function convertType(tods: any[]): TodoItem[] {
-    return tods.map((todoItem) => {
-      var newObj: TodoItem = {
-        id: todoItem.id,
-        title: todoItem.title,
-        description: todoItem.description,
-        date: new Date(todoItem.date),
-        status: convertToTodoStatus(todoItem.status),
-        priority: converttotodopriority(todoItem.priority),
-        
-        labels: todoItem.labels.split(","),
-      };
-      return newObj;
-    });
-  }
+  // export function convertType(tods: any[]): TodoItem[] {
+   
+  //   return tods.map((todoItem) => {
+  //     const labelsArray = todoItem.labels ? todoItem.labels.split(",") : [];
+  //     var newObj: TodoItem = {
+  //       id: todoItem.id,
+  //       title: todoItem.title,
+  //       description: todoItem.description,
+  //       date: new Date(todoItem.date),
+  //       status: convertToTodoStatus(todoItem.status),
+  //       priority: converttotodopriority(todoItem.priority),
+  //       labels: labelsArray
+  //     };
+  //     return newObj;
+  //   });
+  // }
   
 
- const HandleApiRequest = async (url: string,method: string, body?: any) => {
-    const options: RequestInit = { method: method,
-      headers: {
-        "Content-Type": "application/json",
-        "ngrok-skip-browser-warning": String(true),
-      },
-      body: body ? JSON.stringify(body) : undefined,
+  const HandleApiRequest = async (url: string, method: string, todo: TodoItem) => {
+    const options = {
+      method: method, 
+      body: JSON.stringify(todo)
     };
-  
     try {
       const response = await fetch(url, options);
       if (!response.ok) {
@@ -91,4 +100,5 @@ export function filterTodos(
       throw error;
     }
   };
-  export {HandleApiRequest}
+  export { HandleApiRequest };
+ 

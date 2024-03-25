@@ -4,8 +4,7 @@ from typing import Annotated,List
 from contextlib import asynccontextmanager
 from sqlmodel import create_engine,Session,select 
 from fastapi.middleware.cors import CORSMiddleware
- 
- 
+import ast
  
 # 3. Set Up Database Connection
 # PostgreSQL is a type of database, and 
@@ -25,7 +24,7 @@ engine = create_engine( connection_string, connect_args={"sslmode": "require"}, 
 def create_tables():
     # We can create multiple tables only we define the schema for each table
     todomodel.Todo.metadata.create_all(engine)
-    todomodel.MoodPreference.metadata.create_all(engine)
+    
     # todomodel.ourData.metadata.create_all(engine)
     
     
@@ -57,27 +56,7 @@ app.add_middleware(
 def get_session():
     with Session(engine) as session:
         yield session
-@app.get('mood', response_model=todomodel.MoodPreference)
-def get_mood_preference(session: Annotated[Session, Depends(get_session)]):
-    moodpre = session.exec(select(todomodel.MoodPreference)).all()
-    return moodpre
  
-@app.post('/mood/{mood_id}')
-def update_mood(mood_id: int, updated_mood: todomodel.MoodPreference, session: Annotated[Session, Depends(get_session)]):
-    default_mood = session.get(todomodel.MoodPreference,mood_id)
-    if not default_mood:
-        default_mood = todomodel.MoodPreference(light_id=1, mood='dark')
-        session.add(default_mood)
-        session.commit() 
-    sessionmood = session.get(todomodel.MoodPreference, mood_id)
-    if not sessionmood:
-        raise HTTPException(status_code=404, detail="Mood not found")
-    sessionmood.mood = updated_mood.mood
-    session.commit()
-
-    return {"message": f"Mood preference with id {mood_id} updated successfully"}
-    
-    
     
     
 @app.get("/todos/", response_model=list[todomodel.Todo])
@@ -85,8 +64,9 @@ def read_todos(session: Annotated[Session, Depends(get_session)]):
     todos = session.exec(select(todomodel.Todo)).all()
     return todos
 
+ 
 
-@app.post("/todos/", response_model=todomodel.Todo)
+@app.post("/todo", response_model=todomodel.Todo)
 def create_todo(todo: todomodel.Todo, session: Annotated[Session, Depends(get_session)]):
     session.add(todo)
     session.commit()
@@ -102,7 +82,7 @@ def delete_todo(todo_id: int, session: Session = Depends(get_session)):
     session.commit()
     
     return {"message": "Todo deleted successfully"}
-import ast
+
 @app.put("/todos/{todo_id}", )
 def update_todos(todo_id: int, updated_todo: todomodel.Todo, session: Session = Depends(get_session)):
     todo = session.get(todomodel.Todo, todo_id)

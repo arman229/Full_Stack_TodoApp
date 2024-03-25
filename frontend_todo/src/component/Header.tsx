@@ -17,7 +17,7 @@ const Header: FC<HearderType> = ({ toggleDarkMode, isDarkMode }) => {
         }
       >
         <div>
-          <span className="text-4xl font-semi-bold ">Todoarman</span>
+          <span className="text-4xl font-semi-bold ">Todo</span>
         </div>
 
         <button onClick={toggleDarkMode} className={"p-2"}>

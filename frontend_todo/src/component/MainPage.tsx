@@ -8,7 +8,7 @@ import AddTodoModel from "./AddTodoModel";
 import { filterTodos} from "@/utils/DateUtils";
 import { TodoItem } from "@/data/datatypes";
 import ThreeChips from "./threebutton";
-import { convertType } from "@/utils/DateUtils";
+ 
 import {HandleApiRequest} from "@/utils/DateUtils";
 import { API_URL } from "@/utils/url";
 import Myloading from '@/component/myloading';
@@ -72,9 +72,10 @@ const MainPage = () => {
       setLoading(true);
       const response = await fetch(API_URL,options);
       const data = await response.json();
-      var dataWithDate = convertType(data);
+ 
       setLoading(false);
-      setTodosArray(dataWithDate);
+      setTodosArray(data);
+      console.log('our fetch data',data)
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
@@ -83,45 +84,47 @@ const MainPage = () => {
   };
 
   
-  const onDelete = async (todoItem: TodoItem): Promise<void> => {
-    try {
-      await HandleApiRequest(`${API_URL}${todoItem.id}`, "DELETE");
-    } catch (error) {
-      console.error("Error deleting todo:", error);
-      throw error;
-    }
+  const onDelete = async (todoItem: TodoItem) => {
+    // try {
+    //   await HandleApiRequest(`${API_URL}${todoItem.id}`, "DELETE");
+    //   const updatedTodos = await fetchData();
+      
+    // } catch (error) {
+    //   console.error("Error deleting todo:", error);
+    //   throw error;
+    // }
   };
 
 
   const onAddOrUpdate = async (newTodoItem: TodoItem) => {
-    try {
-      let url = API_URL;
-      let method = "POST";
+    // try {
+    //   let url = API_URL;
+    //   let method = "POST";
   
-      if (newTodoItem.id) {
-        url += newTodoItem.id;
-        method = "PUT";
-      }
+    //   if (newTodoItem.id) {
+    //     url += newTodoItem.id;
+    //     method = "PUT";
+    //   }
   
-      const updatedData = await HandleApiRequest(
-        url,
-        method,
-        newTodoItem
-      );
+    //   const updatedData = await HandleApiRequest(
+    //     url,
+    //     method,
+    //     newTodoItem
+    //   );
   
-      if (newTodoItem.id) {
-        setTodosArray((prevArray: TodoItem[]) =>
-          prevArray.map((item) =>
-            item.id === updatedData.id ? updatedData : item
-          )
-        );
-      } else {
-        setTodosArray((prevArray: TodoItem[]) => [...prevArray, updatedData]);
-      }
-    } catch (error) {
-      console.error("Error adding/updating todo:", error);
-      throw error;
-    }
+    //   if (newTodoItem.id) {
+    //     setTodosArray((prevArray: TodoItem[]) =>
+    //       prevArray.map((item) =>
+    //         item.id === updatedData.id ? updatedData : item
+    //       )
+    //     );
+    //   } else {
+    //     setTodosArray((prevArray: TodoItem[]) => [...prevArray, updatedData]);
+    //   }
+    // } catch (error) {
+    //   console.error("Error adding/updating todo:", error);
+    //   throw error;
+    // }
   };
   
 

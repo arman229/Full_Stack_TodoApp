@@ -1,1 +1,1 @@
-export const API_URL:string = "https://crow-bold-radically.ngrok-free.app/todos/"
+export const API_URL:string = "http://localhost:8000/todos"

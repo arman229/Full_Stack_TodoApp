@@ -2,6 +2,7 @@
 import React, {FC, useEffect, useState} from "react";
 import {TodoItem, TodoPriority, TodoStatus} from "@/data/datatypes";
 import {DeletableChip} from "./DeletableChip";
+ 
 
 
 
@@ -20,8 +21,8 @@ const AddTodoModel: FC<AddTodoModelInterface> = ({isDarkMode, closeModal, onSave
     const [title, setTitle] = useState<string>("")
     const [description, setDescription] = useState<string>("")
     const [date, setDate] = useState<Date>(new Date())
-    const [priority, setPriority] = useState<TodoPriority>('LOW')
-    const [status, setStatus] = useState<TodoStatus>('PENDING');
+    const [priority, setPriority] = useState<TodoPriority>(TodoPriority.LOW)
+    const [status, setStatus] = useState<TodoStatus>(TodoStatus.PENDING);
     const [labelInput, setLabelInput] = useState<string>("")
     const [labels, setLabels] = useState<string[]>([])
     const [submitButtonClicked, setSubmitButtonClicked] = useState(false);
@@ -74,7 +75,7 @@ const AddTodoModel: FC<AddTodoModelInterface> = ({isDarkMode, closeModal, onSave
     };
 
     const handleCheckboxChange = () => {
-        setStatus((prevStatus) => (prevStatus === 'PENDING' ? 'COMPLETED' : 'PENDING'));
+        setStatus((prevStatus) => (prevStatus === TodoStatus.PENDING ? TodoStatus.COMPLETED : TodoStatus.PENDING));
     };
     const deleteLabel = (index: number) => {
       const  addaudio = new Audio('/audio/remove.mp3');
@@ -119,7 +120,7 @@ const AddTodoModel: FC<AddTodoModelInterface> = ({isDarkMode, closeModal, onSave
                     </div>
 
                     <div className=" flex gap-2 mb-4">
-                        <div style={{flex: '1'}}>
+                        {/* <div style={{flex: '1'}}>
                             <label htmlFor="datepicker"
                                    className={`block text-sm font-medium  ${isDarkMode ? ' bg-white ' : '  text-white'}`}>Select
                                 a
@@ -128,7 +129,7 @@ const AddTodoModel: FC<AddTodoModelInterface> = ({isDarkMode, closeModal, onSave
                                    value={date.toISOString().split('T')[0]}
                                    onChange={(e) => setDate(new Date(e.target.value))}
                                    className={`mt-1 p-2 block w-full border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300 ${isDarkMode ? ' bg-white text-gray-900 ' : '   bg-gray-700 text-white'}`}/>
-                        </div>
+                        </div> */}
 
 
                         <div style={{flex: '1'}}>

@@ -10,5 +10,13 @@ export type TodoItem = {
   labels: string[];
 };
 
-export type TodoStatus = "PENDING" | "COMPLETED";
-export type TodoPriority = "LOW" | "MEDIUM" | "HIGH";
+export enum TodoStatus {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+}
+
+export enum TodoPriority {
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+}
