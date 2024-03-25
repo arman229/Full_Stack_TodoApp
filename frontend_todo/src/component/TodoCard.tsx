@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { formatDate } from "../utils/DateUtils";
 import { TodoItem } from "../data/datatypes";
 import { TodoMenu } from "./TodoMenu";
-import {TodoStatus} from "@/data/datatypes";
+import { TodoStatus } from "@/data/datatypes";
 
 interface TodoCardType {
   todoItem: TodoItem;
@@ -42,7 +42,9 @@ const TodoCard: FC<TodoCardType> = ({
                 onStatusChange({
                   ...todoItem,
                   status:
-                    todoItem.status == TodoStatus.PENDING ? TodoStatus.COMPLETED : TodoStatus.PENDING,
+                    todoItem.status == TodoStatus.PENDING
+                      ? TodoStatus.COMPLETED
+                      : TodoStatus.PENDING,
                 });
                 const addaudio = new Audio("/audio/markasdone.mp3");
                 addaudio.play();
@@ -58,7 +60,6 @@ const TodoCard: FC<TodoCardType> = ({
             </button>
             <div className="py-1 px-2 flex-shrink-0 sm:text-sm">
               {formatDate(todoItem.date)}
-           
             </div>
           </div>
           <div
@@ -70,7 +71,7 @@ const TodoCard: FC<TodoCardType> = ({
 
           <TodoMenu
             onEditItem={() => onEdit(todoItem)}
-            onDeleteItem={() => onDelete(todoItem)}
+            onDeleteItem={() => onDelete(todoItem.id)}
           />
         </div>
 
@@ -88,7 +89,8 @@ const TodoCard: FC<TodoCardType> = ({
                 className={`py-1 px-3.5 text-sm rounded-full border text-[#9fb9d0] bg-[#232d35] `}
                 key={label}
               >
-                {label}{todoItem.labels.length}
+                {label}
+                {todoItem.labels.length}
               </div>
             ))}
         </div>

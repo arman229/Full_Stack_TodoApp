@@ -73,38 +73,27 @@ const MainPage = () => {
       setLoading(false);
     }
   };
-  const onDelete = async (id:number) => {
+  const onDelete = async (todoItem: TodoItem) => {
     const headers = new Headers();
+    headers.append("ngrok-skip-browser-warning", String(true));
+    var options = {
+      method: "DELETE",
+      headers: headers,
+    };
     try {
-      const response = await fetch(`${API_URL}/todos/${id}`, {
-        method: "DELETE",
-        headers: headers,
-      });
+      const response = await fetch(`${API_URL}/todo/${todoItem.id}`,options);
       if (!response.ok) {
          console.log("Failed to delete todo");
-         console.log(id);
+         console.log(todoItem.id);
       }
  
     } catch (error) {
       console.error("Error deleting todo:", error);
-      throw error;
+       
     }
   };
 
-  // const onDelete = async (todoItem: TodoItem) => {
-  //   try {
-  //     // Delete the todo item from the server
-  //     await HandleApiRequest(
-  //       `${API_URL}/todos${todoItem.id}`,
-  //       "DELETE",
-  //       todoItem
-  //     );
-  //     await fetchData();
-  //   } catch (error) {
-  //     console.error("Error deleting todo:", error);
-  //     throw error;
-  //   }
-  // };
+ 
 
   const onAddOrUpdate = async (newTodoItem: TodoItem) => {
     // try {

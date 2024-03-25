@@ -6,7 +6,7 @@ export function formatDate(date: Date): string {
   if (!(date instanceof Date)) {
       date = new Date(date);
       if (isNaN(date.getTime())) {
-          // If the conversion fails, return an empty string or handle the error accordingly
+           
           return '';
       }
   }
@@ -39,50 +39,7 @@ export function filterTodos(
     );
     return result;
   }
-  
-  // function convertToTodoStatus(status: string): TodoStatus {
-  //     const lowerCaseStatus = status.toLowerCase();  
-      
-  //     if (lowerCaseStatus.includes("pen") || lowerCaseStatus === "inprogress"||lowerCaseStatus === "uncompleted"||lowerCaseStatus === "pending") {
-  //       return "PENDING";
-  //     } else if (lowerCaseStatus.includes("com") || lowerCaseStatus === "completed"|| lowerCaseStatus === "completes"||lowerCaseStatus === "complete") {
-  //       return "COMPLETED";
-  //     } else {
-  //       return "PENDING";  
-  //     }
-  //   }
-  //   function converttotodopriority(priority: string): TodoPriority {
-  //     const lowerCasePriority = priority.toLowerCase();
-      
-  //     if (lowerCasePriority.includes("low")) {
-  //       return "LOW";
-  //     } else if (lowerCasePriority.includes("medium")) {
-  //       return "MEDIUM";
-  //     } else if (lowerCasePriority.includes("high")) {
-  //       return "HIGH";
-  //     } else {
-  //       return "MEDIUM";  
-  //     }
-  //   }
-    
-  
-  // export function convertType(tods: any[]): TodoItem[] {
-   
-  //   return tods.map((todoItem) => {
-  //     const labelsArray = todoItem.labels ? todoItem.labels.split(",") : [];
-  //     var newObj: TodoItem = {
-  //       id: todoItem.id,
-  //       title: todoItem.title,
-  //       description: todoItem.description,
-  //       date: new Date(todoItem.date),
-  //       status: convertToTodoStatus(todoItem.status),
-  //       priority: converttotodopriority(todoItem.priority),
-  //       labels: labelsArray
-  //     };
-  //     return newObj;
-  //   });
-  // }
-  
+ 
 
   const HandleApiRequest = async (url: string, method: string, todo: TodoItem) => {
     const options = {
