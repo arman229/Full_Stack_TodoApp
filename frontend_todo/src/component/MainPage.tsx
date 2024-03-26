@@ -81,7 +81,7 @@ const MainPage = () => {
   const onAddOrUpdate = async (todoItem: TodoItem) => {
     console.log("todo id is :" + todoItem.id);
     try {
-      setLoading(true);
+     
       if (todoItem.id) {
         await updateTodo(todoItem);
         const updatedTodosArray = todosArray.map((item) =>
@@ -92,11 +92,11 @@ const MainPage = () => {
         await addTodo(todoItem);
         setTodosArray([...todosArray, todoItem]);
       }
+
        
-      setLoading(false);
       console.log("operagtion success  ");
     } catch (error) {
-      setLoading(false);
+      
       console.error("Error opeartion todo:", error);
     }
   };
@@ -118,6 +118,8 @@ const MainPage = () => {
             searchTerm={searchQuery}
             onSearchChange={(q) => setSearchQuery(q)}
             onAddTodoButtonClick={() => {
+              const addaudio = new Audio("/audio/audio.mp3");
+              addaudio.play();
               setIsModalOpen(true);
             }}
           />

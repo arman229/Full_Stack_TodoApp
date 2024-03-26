@@ -3,6 +3,8 @@ import { formatDate } from "../utils/DateUtils";
 import { TodoItem } from "../data/datatypes";
 import { TodoMenu } from "./TodoMenu";
 import { TodoStatus } from "@/data/datatypes";
+import { MyStatusloading } from "./myloading";
+import { useState } from "react";
 
 interface TodoCardType {
   todoItem: TodoItem;
@@ -19,6 +21,27 @@ const TodoCard: FC<TodoCardType> = ({
   onDelete,
   isDarkMode,
 }) => {
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const handleStatusChange = async () => {
+    setIsUpdating(true);
+    try {
+      const addaudio = new Audio("/audio/markasdone.mp3");
+      addaudio.play();
+      await onStatusChange({
+        ...todoItem,
+        status:
+          todoItem.status === TodoStatus.PENDING
+            ? TodoStatus.COMPLETED
+            : TodoStatus.PENDING,
+      });
+    } catch (error) {
+      console.error("Error updating status:", error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   const getPriorityClasses = () => {
     if (todoItem.priority == "LOW") {
       return "bg-[#ff865b]  border-[#ff865b] text-black ";
@@ -30,6 +53,8 @@ const TodoCard: FC<TodoCardType> = ({
   };
   return (
     <>
+      {" "}
+      <MyStatusloading />
       <div
         className={` max-w-sm w-full   sm:p-4  py-6 px-2  shadow-lg   dark:text-[#9fb9d0] dark:bg-[#232d35] bg-gray-200  } `}
         style={{ borderRadius: "20px" }}
@@ -38,17 +63,7 @@ const TodoCard: FC<TodoCardType> = ({
           <div className="flex items-center">
             <button
               type="button"
-              onClick={() => {
-                onStatusChange({
-                  ...todoItem,
-                  status:
-                    todoItem.status == TodoStatus.PENDING
-                      ? TodoStatus.COMPLETED
-                      : TodoStatus.PENDING,
-                });
-                const addaudio = new Audio("/audio/markasdone.mp3");
-                addaudio.play();
-              }}
+              onClick={handleStatusChange}
               className={`py-1 px-3.5 text-sm focus:outline-none rounded-full border  bg-[#1b2431] hover:bg-[#1b1111]   ${
                 todoItem.status == "COMPLETED"
                   ? "text-[#addf92]   border-[#addf92]   "
@@ -56,7 +71,7 @@ const TodoCard: FC<TodoCardType> = ({
               }`}
             >
               {" "}
-              {todoItem.status}
+               <MyStatusloading /> 
             </button>
             <div className="py-1 px-2 flex-shrink-0 sm:text-sm">
               {formatDate(todoItem.date)}
