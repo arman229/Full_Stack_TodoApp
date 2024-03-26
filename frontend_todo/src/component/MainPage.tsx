@@ -8,10 +8,9 @@ import AddTodoModel from "./AddTodoModel";
 import { filterTodos } from "@/utils/DateUtils";
 import { TodoItem } from "@/data/datatypes";
 import ThreeChips from "./threebutton";
-
-import { HandleApiRequest } from "@/utils/DateUtils";
 import { API_URL } from "@/utils/url";
 import Myloading from "@/component/myloading";
+import { getAllTodos, deleteTodo, addTodo, updateTodo } from "@/data/RestApis";
 const MainPage = () => {
   const [isLightMode, setIsLightMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,8 +24,6 @@ const MainPage = () => {
   useEffect(() => {
     var isLight = Boolean(localStorage.getItem("isLight") === "true");
     setIsLightMode(isLight);
-  }, []);
-  useEffect(() => {
     fetchData();
   }, []);
 
@@ -54,71 +51,60 @@ const MainPage = () => {
     setFilteredTodos(updatedFilteredTodos);
   }, [searchQuery, todosArray, selectedChip]);
 
-  async function fetchData(){
-    const headers = new Headers();
-    headers.append("ngrok-skip-browser-warning", String(true));
-    var options = {
-      method: "GET",
-      headers: headers,
-    };
+  async function fetchData() {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/todos`, options);
-      const data = await response.json();
+      const data = await getAllTodos();
       setLoading(false);
       setTodosArray(data);
-      console.log("our fetch data", data);
     } catch (error) {
-      console.error("Error fetching data:", error);
       setLoading(false);
     }
-  };
+  }
   const onDelete = async (todoItem: TodoItem) => {
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    var options = {
-      method: "DELETE",
-      headers: headers,
-    };
     try {
-      const response = await fetch(`${API_URL}/todo/${todoItem.id}`, options);
-      if (!response.ok) {
-        console.log("Failed to delete todo");
-        console.log(todoItem.id);
-      }
-      await fetchData();
+      setLoading(true);
+      await deleteTodo(todoItem.id!!);
+      const updatedTodosArray = todosArray.filter(
+        (item) => item.id !== todoItem.id
+      );
+      setTodosArray(updatedTodosArray);
+      setLoading(false);
+
+      console.log("Failed to delete todo");
     } catch (error) {
+      setLoading(false);
       console.error("Error deleting todo:", error);
     }
   };
 
-  const onAddOrUpdate = async (newTodoItem: TodoItem) => {
+  const onAddOrUpdate = async (todoItem: TodoItem) => {
+    console.log("todo id is :" + todoItem.id);
     try {
-      let url = `${API_URL}/todo`;
-      let method = "POST";
-      
-      if (newTodoItem.id) {
-        url += `/${newTodoItem.id}`;
-        method = "PUT";
-      } 
-      const updatedData = await HandleApiRequest(url, method, newTodoItem);
-      console.log('mydatataaaaa',updatedData);
-    
-      await fetchData();
-  
+      setLoading(true);
+      if (todoItem.id) {
+        await updateTodo(todoItem);
+        const updatedTodosArray = todosArray.map((item) =>
+          item.id === todoItem.id ? todoItem : item
+        );
+        setTodosArray(updatedTodosArray);
+      } else {
+        await addTodo(todoItem);
+        setTodosArray([...todosArray, todoItem]);
+      }
+       
+      setLoading(false);
+      console.log("operagtion success  ");
     } catch (error) {
-      console.error("Error adding/updating todo:", error);
-      throw error;
+      setLoading(false);
+      console.error("Error opeartion todo:", error);
     }
   };
-  
 
   return (
     <>
       <div
-        className={` flex flex-col min-h-screen   ${
-          !isLightMode ? "dark" : ""
-        }`}
+        className={`flex flex-col min-h-screen ${!isLightMode ? "dark" : ""}`}
       >
         <Header
           toggleDarkMode={() => {
@@ -127,17 +113,11 @@ const MainPage = () => {
           }}
           isDarkMode={isLightMode}
         />
-        <div
-          className={
-            " px-2  flex-1   text-black     dark:bg-[#121c22]  bg-white"
-          }
-        >
+        <div className={"px-2 flex-1 text-black dark:bg-[#121c22] bg-white"}>
           <Search
             searchTerm={searchQuery}
             onSearchChange={(q) => setSearchQuery(q)}
             onAddTodoButtonClick={() => {
-              const addaudio = new Audio("/audio/audio.mp3");
-              addaudio.play();
               setIsModalOpen(true);
             }}
           />
@@ -147,20 +127,17 @@ const MainPage = () => {
             onSelectChip={setSelectedChip}
           />
           <div className="flex flex-wrap justify-center gap-6 pb-8">
-            {loading ? (
-              <Myloading />
-            ) : (
-              filteredTodos.map((item) => (
-                <TodoCard
-                  key={item.id}
-                  todoItem={item}
-                  onStatusChange={onAddOrUpdate}
-                  onEdit={() => onEdit(item)}
-                  onDelete={() => onDelete(item)}
-                  isDarkMode={isLightMode}
-                />
-              ))
-            )}
+            {filteredTodos.map((item) => (
+              <TodoCard
+                key={item.id}
+                todoItem={item}
+                onStatusChange={onAddOrUpdate}
+                onEdit={() => onEdit(item)}
+                onDelete={() => onDelete(item)}
+                isDarkMode={isLightMode}
+              />
+            ))}
+            {loading && <Myloading />}
           </div>
         </div>
         <Footer />
@@ -178,5 +155,5 @@ const MainPage = () => {
     </>
   );
 };
- 
+
 export default MainPage;

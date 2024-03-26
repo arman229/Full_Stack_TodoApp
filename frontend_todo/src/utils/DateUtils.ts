@@ -41,24 +41,3 @@ export function filterTodos(
     return result;
   }
  
-
-  const HandleApiRequest = async (url: string, method: string, todo: TodoItem) => {
-    const options = {
-      method: method, 
-      body: JSON.stringify(todo)
-    };
-    try {
-      const response = await fetch(url, options);
-      if (!response.ok) {
-          console.log(`Failed to ${method.toLowerCase()} data`);
-      }
-      return await response.json();
-    
-       
-    } catch (error) {
-      console.error(`Error ${method.toLowerCase()} data:`, error);
-      throw error;
-    }
-  };
-  export { HandleApiRequest };
- 
