@@ -54,7 +54,7 @@ const TodoCard: FC<TodoCardType> = ({
   return (
     <>
       {" "}
-      <MyStatusloading />
+       
       <div
         className={` max-w-sm w-full   sm:p-4  py-6 px-2  shadow-lg   dark:text-[#9fb9d0] dark:bg-[#232d35] bg-gray-200  } `}
         style={{ borderRadius: "20px" }}
@@ -70,8 +70,8 @@ const TodoCard: FC<TodoCardType> = ({
                   : "   text-[#e6b56c]  border-[#e6b56c]  "
               }`}
             >
-              {" "}
-               <MyStatusloading /> 
+              {" "}  {isUpdating ?  <MyStatusloading />: todoItem.status}
+               
             </button>
             <div className="py-1 px-2 flex-shrink-0 sm:text-sm">
               {formatDate(todoItem.date)}

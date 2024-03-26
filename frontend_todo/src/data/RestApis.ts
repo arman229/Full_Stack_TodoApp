@@ -1,5 +1,4 @@
 import { TodoItem } from "./datatypes";
-
 const BASE_URL: string = "http://localhost:8000";
 const baseHeaders = new Headers();
 baseHeaders.append("ngrok-skip-browser-warning", "true");

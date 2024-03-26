@@ -1,30 +1,29 @@
 "use client";
+import "@/app/globals.css";
 import React from "react";
-import { FidgetSpinner, ProgressBar } from "react-loader-spinner";
+import { FidgetSpinner, Rings } from "react-loader-spinner";
 
 const Myloading = () => {
   return (
     <FidgetSpinner
       visible={true}
-      height="80"
-      width="80"
+      height="100"
+      width="100"
       ariaLabel="fidget-spinner-loading"
       wrapperStyle={{}}
-      wrapperClass="fidget-spinner-wrapper"
+      wrapperClass="mycustomclass"
     />
   );
 };
 export const MyStatusloading = () => {
   return (
-    <div style={{ backgroundColor: "red" }}>
-      <ProgressBar
-        visible={true}
-        height="40"
-        width="80"
-        barColor="white"
-        borderColor="green"
-      />
-    </div>
+    <Rings
+      visible={true}
+      height="30"
+      width="60"
+      color="#4fa94d"
+       
+    />
   );
 };
 export default Myloading;

@@ -8,7 +8,7 @@ import AddTodoModel from "./AddTodoModel";
 import { filterTodos } from "@/utils/DateUtils";
 import { TodoItem } from "@/data/datatypes";
 import ThreeChips from "./threebutton";
-import { API_URL } from "@/utils/url";
+ 
 import Myloading from "@/component/myloading";
 import { getAllTodos, deleteTodo, addTodo, updateTodo } from "@/data/RestApis";
 const MainPage = () => {
@@ -81,7 +81,7 @@ const MainPage = () => {
   const onAddOrUpdate = async (todoItem: TodoItem) => {
     console.log("todo id is :" + todoItem.id);
     try {
-     
+     setLoading(true);
       if (todoItem.id) {
         await updateTodo(todoItem);
         const updatedTodosArray = todosArray.map((item) =>
@@ -93,10 +93,10 @@ const MainPage = () => {
         setTodosArray([...todosArray, todoItem]);
       }
 
-       
+       setLoading(false);
       console.log("operagtion success  ");
     } catch (error) {
-      
+      setLoading(false);
       console.error("Error opeartion todo:", error);
     }
   };
