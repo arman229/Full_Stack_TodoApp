@@ -70,8 +70,7 @@ const MainPage = () => {
       );
       setTodosArray(updatedTodosArray);
       setLoading(false);
-
-      console.log("Failed to delete todo");
+ 
     } catch (error) {
       setLoading(false);
       console.error("Error deleting todo:", error);
@@ -84,6 +83,7 @@ const MainPage = () => {
       setLoading(true);
       if (todoItem.id) {
         await updateTodo(todoItem);
+        await fetchData();
         const updatedTodosArray = todosArray.map((item) =>
           item.id === todoItem.id ? todoItem : item
         );
@@ -113,7 +113,7 @@ const MainPage = () => {
           }}
           isDarkMode={isLightMode}
         />
-        <div className={` px-2 flex-1  ${loading ? 'opacity-90  bg-black' : 'px-2 flex-1 text-black dark:bg-[#121c22] bg-white'}`}>
+        <div className={` px-2 flex-1  ${loading ? 'dark:opacity-90  dark:bg-black    ' : 'px-2 flex-1 text-black dark:bg-[#121c22] bg-white'}`}>
 
           <Search
             searchTerm={searchQuery}

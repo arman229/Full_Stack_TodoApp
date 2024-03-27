@@ -160,7 +160,7 @@ const AddTodoModel: FC<AddTodoModelInterface> = ({
                 type="date"
                 id="datepicker"
                 name="datepicker"
-                value={date.toISOString().split('T')[0]}
+                  value={date.toISOString().split('T')[0]}
                 onChange={(e) => setDate(new Date(e.target.value))}
                 className={`mt-1 p-2 block w-full border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300 ${
                   isDarkMode
