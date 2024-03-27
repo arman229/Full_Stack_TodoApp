@@ -8,7 +8,7 @@ import AddTodoModel from "./AddTodoModel";
 import { filterTodos } from "@/utils/DateUtils";
 import { TodoItem } from "@/data/datatypes";
 import ThreeChips from "./threebutton";
- 
+import { FidgetSpinner } from "react-loader-spinner";
 import Myloading from "@/component/myloading";
 import { getAllTodos, deleteTodo, addTodo, updateTodo } from "@/data/RestApis";
 const MainPage = () => {
@@ -81,7 +81,7 @@ const MainPage = () => {
   const onAddOrUpdate = async (todoItem: TodoItem) => {
     console.log("todo id is :" + todoItem.id);
     try {
-     setLoading(true);
+      setLoading(true);
       if (todoItem.id) {
         await updateTodo(todoItem);
         const updatedTodosArray = todosArray.map((item) =>
@@ -93,7 +93,7 @@ const MainPage = () => {
         setTodosArray([...todosArray, todoItem]);
       }
 
-       setLoading(false);
+      setLoading(false);
       console.log("operagtion success  ");
     } catch (error) {
       setLoading(false);
@@ -113,7 +113,8 @@ const MainPage = () => {
           }}
           isDarkMode={isLightMode}
         />
-        <div className={"px-2 flex-1 text-black dark:bg-[#121c22] bg-white"}>
+        <div className={` px-2 flex-1  ${loading ? 'opacity-90  bg-black' : 'px-2 flex-1 text-black dark:bg-[#121c22] bg-white'}`}>
+
           <Search
             searchTerm={searchQuery}
             onSearchChange={(q) => setSearchQuery(q)}
@@ -128,7 +129,9 @@ const MainPage = () => {
             selectedChip={selectedChip}
             onSelectChip={setSelectedChip}
           />
-          <div className="flex flex-wrap justify-center gap-6 pb-8">
+         
+
+          <div className="flex flex-wrap justify-center gap-6 pb-8 relative">
             {filteredTodos.map((item) => (
               <TodoCard
                 key={item.id}
@@ -139,7 +142,9 @@ const MainPage = () => {
                 isDarkMode={isLightMode}
               />
             ))}
-            {loading && <Myloading />}
+            {loading && (
+              <Myloading/>
+            )}
           </div>
         </div>
         <Footer />
