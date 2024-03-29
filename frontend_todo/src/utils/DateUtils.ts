@@ -27,7 +27,7 @@ export function filterTodos( todosArray: TodoItem[],  searchQuery: string
         item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.priority.toLowerCase().includes(searchQuery.toLowerCase())||
-        item.date instanceof Date && item.date.toISOString().includes(searchQuery)||
+        
         item.labels.some(
           (label) =>
             label.toLowerCase().includes(searchQuery.toLowerCase()) 

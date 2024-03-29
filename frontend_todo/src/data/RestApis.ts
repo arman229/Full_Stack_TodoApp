@@ -3,7 +3,7 @@ const BASE_URL: string = "http://localhost:8000";
 const baseHeaders = new Headers();
 baseHeaders.append("ngrok-skip-browser-warning", "true");
 
-export async function getAllTodos() {
+export async function getAllTodos(): Promise<TodoItem[]> {
   var options = {
     method: "GET",
     headers: baseHeaders,
@@ -11,7 +11,13 @@ export async function getAllTodos() {
 
   const response = await fetch(BASE_URL + "/todos", options);
   const data = await response.json();
-  return data;
+  const newData = data.map((item: TodoItem) => {
+    return {
+      ...item,
+      date: new Date(item.date),
+    };
+  });
+  return newData;
 }
 
 export async function deleteTodo(todoId: number) {
@@ -32,6 +38,7 @@ export async function addTodo(todo: TodoItem) {
   };
   const response = await fetch(BASE_URL + `/todo`, options);
   const data = await response.json();
+  return data
 }
 
 export async function updateTodo(todo: TodoItem) {

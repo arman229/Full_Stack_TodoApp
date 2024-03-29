@@ -45,12 +45,12 @@ def get_todos(session: Annotated[Session, Depends(get_session)]):
 
  
 
-@app.post("/todo", response_model=Dict[str,str])
+@app.post("/todo",  )
 def add_todo(todo: todomodel.Todo, session: Annotated[Session, Depends(get_session)]):
     session.add(todo)
     session.commit()
     session.refresh(todo)
-    return {"message": "Todo created successfully"}
+    return {"message": "Todo created successfully", "todo_id" :todo.id}
 
 @app.delete("/todo/{todo_id}",response_model=Dict[str,str] )
 def delete_todo(todo_id: int, session: Annotated[Session, Depends(get_session)]):

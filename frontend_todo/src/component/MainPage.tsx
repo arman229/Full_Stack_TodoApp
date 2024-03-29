@@ -55,14 +55,6 @@ useEffect(() => {
   setFilteredTodos(updatedFilteredTodos);
 }, [searchQuery, todosArray, selectedChip]);
 
-
-
-
-
-
-
-
-
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedTodo(undefined);
@@ -71,9 +63,6 @@ useEffect(() => {
     setSelectedTodo(newTodoItem);
     setIsModalOpen(true);
   };
-
-
-
 
   async function fetchData() {
     try {
@@ -104,26 +93,36 @@ useEffect(() => {
   const onAddOrUpdate = async (todoItem: TodoItem) => {
     console.log("todo id is :" + todoItem.id);
     try {
-      setLoading(true);
-      if (todoItem.id) {
-        await updateTodo(todoItem);
-        await fetchData();
-        const updatedTodosArray = todosArray.map((item) =>
-          item.id === todoItem.id ? todoItem : item
-        );
-        setTodosArray(updatedTodosArray);
-      } else {
-        await addTodo(todoItem);
-        setTodosArray([...todosArray, todoItem]);
+        setLoading(true);
+        let res;
+        if (todoItem.id) {
+            await updateTodo(todoItem);
+            const updatedTodosArray = todosArray.map((item) =>
+                item.id === todoItem.id ? todoItem : item
+            );
+            setTodosArray(updatedTodosArray);
+        } else {
+          try {
+            setLoading(true);
+            let res = await addTodo(todoItem);
+            const savedId = res.todo_id;  
+            const newData = { ...todoItem, id: savedId }; 
+            setTodosArray([...todosArray, newData]);  
+            
+        } catch (error) {
+            setLoading(false);
+           
+        }
       }
 
-      setLoading(false);
-      console.log("operagtion success  ");
+        setLoading(false);
+        console.log("operation success");
     } catch (error) {
-      setLoading(false);
-      console.error("Error opeartion todo:", error);
+        setLoading(false);
+        console.error("Error operation todo:", error);
     }
-  };
+};
+
 
 
 
