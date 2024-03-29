@@ -101,34 +101,28 @@ const MainPage = () => {
     }
   };
 
+  function ToggleModefun (){ 
+     localStorage.setItem("isLight", String(!isLightMode));
+       setIsLightMode(!isLightMode);
+}
+function onAddTodoButtonClick() {
+  const addaudio = new Audio("/audio/audio.mp3");
+  addaudio.play();
+  setIsModalOpen(true);
+}
+function onSearchChange(query:string) {
+  setSearchQuery(query)
+}
+function onSelectChip(statusvalue:string){
+   setSelectedChip(statusvalue)
+}
   return (
     <>
-      <div
-        className={`flex flex-col min-h-screen ${!isLightMode ? "dark" : ""}`}
-      >
-        <Header
-          toggleDarkMode={() => {
-            localStorage.setItem("isLight", String(!isLightMode));
-            setIsLightMode(!isLightMode);
-          }}
-          isDarkMode={isLightMode}
-        />
-        <div className={` px-2 flex-1  ${loading ? 'dark:opacity-90  dark:bg-black    ' : 'px-2 flex-1 text-black dark:bg-[#121c22] bg-white'}`}>
-
-          <Search
-            searchTerm={searchQuery}
-            onSearchChange={(q) => setSearchQuery(q)}
-            onAddTodoButtonClick={() => {
-              const addaudio = new Audio("/audio/audio.mp3");
-              addaudio.play();
-              setIsModalOpen(true);
-            }}
-          />
-
-          <ThreeChips
-            selectedChip={selectedChip}
-            onSelectChip={setSelectedChip}
-          />
+      <div  className={`flex flex-col min-h-screen ${!isLightMode ? "dark" : ""}`}>
+        <Header  toggleDarkMode={ToggleModefun}  isDarkMode={isLightMode}/>
+        <div className={` px-2 flex-1  ${loading ? 'dark:opacity-90  dark:bg-black ' : 'px-2 flex-1 text-black dark:bg-[#121c22] bg-white'}`}>
+         <Search searchTerm={searchQuery} onSearchChange={onSearchChange} onAddTodoButtonClick={onAddTodoButtonClick} />
+         <ThreeChips selectedChip={selectedChip} onSelectChip={onSelectChip}/>
          
 
           <div className="flex flex-wrap justify-center gap-6 pb-8 relative">
@@ -139,12 +133,10 @@ const MainPage = () => {
                 onStatusChange={onAddOrUpdate}
                 onEdit={() => onEdit(item)}
                 onDelete={() => onDelete(item)}
-                isDarkMode={isLightMode}
+                 
               />
             ))}
-            {loading && (
-              <Myloading/>
-            )}
+            {loading && <Myloading/> }
           </div>
         </div>
         <Footer />

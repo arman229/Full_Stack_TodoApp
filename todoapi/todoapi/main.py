@@ -34,11 +34,12 @@ app.add_middleware(
 def get_session():
     with Session(engine) as session:
         yield session
+
  
     
     
 @app.get("/todos/", response_model=list[todomodel.Todo])
-def read_todos(session: Annotated[Session, Depends(get_session)]):
+def get_todos(session: Annotated[Session, Depends(get_session)]):
     todos = session.exec(select(todomodel.Todo)).all()
     return todos
 

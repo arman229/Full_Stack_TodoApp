@@ -3,7 +3,7 @@ export type TodoItem = {
   id: null |number;
   title: string;
   description: string;
-  date: Date;
+  date: Date|undefined;
   status: TodoStatus;
   priority: TodoPriority;
   labels: string[];
