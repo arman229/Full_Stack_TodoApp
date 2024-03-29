@@ -55,7 +55,8 @@ const TodoCard: FC<TodoCardType> = ({todoItem,onStatusChange,onEdit,onDelete,}) 
                {isUpdating ?  <MyStatusloading />: todoItem.status}
              </button>
             <div className="py-1 px-2 flex-shrink-0 sm:text-sm">
-              {formatDate(todoItem.date)}
+            {formatDate(todoItem.date instanceof Date ? todoItem.date : new Date())}
+
             </div>
           </div>
           <div className={`py-1 px-3.5 text-sm rounded-full border    ${getPriorityClasses()}`} >

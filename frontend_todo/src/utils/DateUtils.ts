@@ -1,7 +1,5 @@
 
 import { TodoItem } from "@/data/datatypes";
- 
- 
 export function formatDate(date: Date): string {
   if (!(date instanceof Date)) {
       date = new Date(date);
@@ -21,20 +19,19 @@ export function formatDate(date: Date): string {
 
 
 
-export function filterTodos(
-    todosArray: TodoItem[],
-    searchQuery: string
+export function filterTodos( todosArray: TodoItem[],  searchQuery: string
   ): TodoItem[] {
     const result = todosArray.filter(
       (item) =>
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.priority.toLowerCase().includes(searchQuery.toLowerCase())||
+        item.date instanceof Date && item.date.toISOString().includes(searchQuery)||
         item.labels.some(
           (label) =>
-            label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            item.status.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            item.date.toISOString().includes(searchQuery) ||
-            item.priority.toLowerCase().includes(searchQuery.toLowerCase())
+            label.toLowerCase().includes(searchQuery.toLowerCase()) 
+          
         )
     );
     return result;

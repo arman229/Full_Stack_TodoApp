@@ -26,6 +26,42 @@ const MainPage = () => {
     setIsLightMode(isLight);
     fetchData();
   }, []);
+function ToggleModefun (){ 
+    localStorage.setItem("isLight", String(!isLightMode));
+      setIsLightMode(!isLightMode);
+}
+function onAddTodoButtonClick() {
+ const addaudio = new Audio("/audio/audio.mp3");
+ addaudio.play();
+ setIsModalOpen(true);
+}
+function onSearchChange(query:string) {
+ setSearchQuery(query)
+}
+function onSelectChip(statusvalue:string){
+  setSelectedChip(statusvalue)
+}
+useEffect(() => {
+  let byStatusList = todosArray;
+  if (selectedChip !== "all") {
+    const targetStatus =
+      selectedChip === "completed" ? "COMPLETED" : "PENDING";
+    byStatusList = todosArray.filter((todo) => todo.status === targetStatus);
+  }
+  const updatedFilteredTodos =
+    searchQuery !== ""
+      ? filterTodos(byStatusList, searchQuery)
+      : byStatusList;
+  setFilteredTodos(updatedFilteredTodos);
+}, [searchQuery, todosArray, selectedChip]);
+
+
+
+
+
+
+
+
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -36,20 +72,8 @@ const MainPage = () => {
     setIsModalOpen(true);
   };
 
-  useEffect(() => {
-    let byStatusList = todosArray;
-    if (selectedChip !== "all") {
-      const targetStatus =
-        selectedChip === "completed" ? "COMPLETED" : "PENDING";
-      byStatusList = todosArray.filter((todo) => todo.status === targetStatus);
-    }
 
-    const updatedFilteredTodos =
-      searchQuery !== ""
-        ? filterTodos(byStatusList, searchQuery)
-        : byStatusList;
-    setFilteredTodos(updatedFilteredTodos);
-  }, [searchQuery, todosArray, selectedChip]);
+
 
   async function fetchData() {
     try {
@@ -101,21 +125,12 @@ const MainPage = () => {
     }
   };
 
-  function ToggleModefun (){ 
-     localStorage.setItem("isLight", String(!isLightMode));
-       setIsLightMode(!isLightMode);
-}
-function onAddTodoButtonClick() {
-  const addaudio = new Audio("/audio/audio.mp3");
-  addaudio.play();
-  setIsModalOpen(true);
-}
-function onSearchChange(query:string) {
-  setSearchQuery(query)
-}
-function onSelectChip(statusvalue:string){
-   setSelectedChip(statusvalue)
-}
+
+
+
+
+
+
   return (
     <>
       <div  className={`flex flex-col min-h-screen ${!isLightMode ? "dark" : ""}`}>
@@ -141,6 +156,7 @@ function onSelectChip(statusvalue:string){
         </div>
         <Footer />
       </div>
+
       <div className="flex items-center justify-center  ">
         {isModalOpen && (
           <AddTodoModel

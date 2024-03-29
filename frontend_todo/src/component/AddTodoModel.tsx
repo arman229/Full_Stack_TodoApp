@@ -26,7 +26,7 @@ const AddTodoModel: FC<AddTodoModelInterface> = ({ isDarkMode,closeModal,onSave,
     if (editTodoItem) {
       setTitle(editTodoItem.title);
       setDescription(editTodoItem.description);
-      setDate(editTodoItem.date);
+      setDate(editTodoItem.date || new Date());
       setPriority(editTodoItem.priority);
       setStatus(editTodoItem.status);
       setLabels([...editTodoItem.labels]);
