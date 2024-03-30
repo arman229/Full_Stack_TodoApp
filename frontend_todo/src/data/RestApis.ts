@@ -1,5 +1,5 @@
 import { TodoItem } from "./datatypes";
-const BASE_URL: string = "http://localhost:8000";
+const BASE_URL: string = "https://crow-bold-radically.ngrok-free.app";
 const baseHeaders = new Headers();
 baseHeaders.append("ngrok-skip-browser-warning", "true");
 
@@ -38,7 +38,7 @@ export async function addTodo(todo: TodoItem) {
   };
   const response = await fetch(BASE_URL + `/todo`, options);
   const data = await response.json();
-  return data
+  return data;
 }
 
 export async function updateTodo(todo: TodoItem) {

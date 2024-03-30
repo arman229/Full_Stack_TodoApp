@@ -45,7 +45,7 @@ def get_todos(session: Annotated[Session, Depends(get_session)]):
 
  
 
-@app.post("/todo",  )
+@app.post("/todo",response_model=Dict[str,str|int]  )
 def add_todo(todo: todomodel.Todo, session: Annotated[Session, Depends(get_session)]):
     session.add(todo)
     session.commit()

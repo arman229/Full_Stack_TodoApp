@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import sunimg from "@/assets/image/sun.svg";
 import moonimg from "@/assets/image/moon.svg";
 import Image from "next/image";
+import myimage from '@/assets/image/myimage1.jpg'
 
 interface HearderType {
   toggleDarkMode: () => void;
@@ -15,12 +16,12 @@ const Header: FC<HearderType> = ({ toggleDarkMode, isDarkMode }) => {
           <span className="text-4xl font-semi-bold ">Todo</span>
         </div>
 
-        <button onClick={toggleDarkMode} className={"p-2"}>
+        <button onClick={toggleDarkMode} className={" "}>
           {" "}
           {!isDarkMode ? (
-            <Image src={sunimg} alt="Sun" />
+            <Image height={40} className="rounded-full" width={40} src={myimage} alt="Sun" />
           ) : (
-            <Image src={moonimg} alt="Moon" />
+            <Image src={myimage} alt="Moon" />
           )}{" "}
         </button>
       </div>

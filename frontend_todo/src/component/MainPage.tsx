@@ -22,13 +22,13 @@ const MainPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    var isLight = Boolean(localStorage.getItem("isLight") === "true");
-    setIsLightMode(isLight);
+    // var isLight = Boolean(localStorage.getItem("isLight") === "false");
+    // setIsLightMode(isLight);
     fetchData();
   }, []);
 function ToggleModefun (){ 
-    localStorage.setItem("isLight", String(!isLightMode));
-      setIsLightMode(!isLightMode);
+    // localStorage.setItem("isLight", String(!isLightMode));
+    //   setIsLightMode(!isLightMode);
 }
 function onAddTodoButtonClick() {
  const addaudio = new Audio("/audio/audio.mp3");

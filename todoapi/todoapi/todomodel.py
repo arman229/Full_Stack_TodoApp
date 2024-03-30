@@ -20,7 +20,7 @@ class Todo(SQLModel, table=True):
     status: Status
     priority: Priority
     labels: List[str] = Field(sa_type=JSON)
-class NewTodo(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
-    title: str      
-  
+     
+# class Mood(SQLModel, table=True):
+#     id: int = Field(default=None, primary_key=True)
+#     mood:str
