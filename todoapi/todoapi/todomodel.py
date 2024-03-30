@@ -12,6 +12,7 @@ class Priority(str, Enum):
     LOW = 'LOW'
     MEDIUM = 'MEDIUM'
     HIGH = 'HIGH'
+    
 class Todo(SQLModel, table=True):
     id: int = Field(default=None, primary_key=True)
     title: str
@@ -21,6 +22,4 @@ class Todo(SQLModel, table=True):
     priority: Priority
     labels: List[str] = Field(sa_type=JSON)
      
-# class Mood(SQLModel, table=True):
-#     id: int = Field(default=None, primary_key=True)
-#     mood:str
+ 
