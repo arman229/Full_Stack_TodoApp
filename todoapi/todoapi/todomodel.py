@@ -14,7 +14,7 @@ class Priority(str, Enum):
     HIGH = 'HIGH'
     
 class Todo(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
+    id: int|None = Field(default=None, primary_key=True)
     title: str
     description: str
     date: datetime
@@ -22,4 +22,11 @@ class Todo(SQLModel, table=True):
     priority: Priority
     labels: List[str] = Field(sa_type=JSON)
      
- 
+class RespoTodo(SQLModel):
+    id: int 
+    title: str
+    description: str
+    date: datetime
+    status: Status
+    priority: Priority
+    labels: List[str] = Field(sa_type=JSON) 
