@@ -1,4 +1,4 @@
 
-docker build -f Dockerfile.dev -t my_firstdocker_image . 
-docker run -d --name myfirstdockerimage -p 8000:8000 my_firstdocker_image
+docker build -f Dockerfile.dev -t todo_api . 
+docker run -d --name todoapi -p 8000:8000 todo_api 
     docker images
